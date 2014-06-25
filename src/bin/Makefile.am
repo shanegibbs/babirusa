@@ -12,3 +12,4 @@ bin_PROGRAMS = babirusa
 babirusa_SOURCES = babirusa.c
 babirusa_LDADD = $(top_builddir)/src/lib/libbabirusa.a $(AM_LDFLAGS)
 babirusa_LDADD += $(GLIB_LIBS)
+

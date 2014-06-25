@@ -10,4 +10,5 @@ noinst_LIBRARIES = libbabirusa.a
 
 libbabirusa_a_SOURCES = \
 	$(libbabirusa_a_HEADERS) \
-	backup.c \
+	backup.c
+
