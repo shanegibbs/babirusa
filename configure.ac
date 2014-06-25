@@ -26,6 +26,10 @@ AC_LANG([C])
 PKG_CHECK_MODULES([GLIB], [glib-2.0], [have_libglib=yes], [have_libglib=no])
 AM_CONDITIONAL([GLIB],  [test "$have_libglib" = "yes"])
 
+if test "x$have_libglib" = xno ; then
+  AC_MSG_FAILURE([no glib-2.0 found. You probably need to install libglib2.0-dev])
+fi
+
 # Checks for header files.
 AC_HEADER_STDC
 AC_CHECK_HEADERS([stdio.h])
