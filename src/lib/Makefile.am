@@ -12,3 +12,4 @@ libbabirusa_a_SOURCES = \
 	$(libbabirusa_a_HEADERS) \
 	backup.c
 
+AM_CPPFLAGS = -DG_LOG_DOMAIN=\"Babirusa\"
