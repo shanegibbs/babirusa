@@ -2,11 +2,13 @@
 
 #define BAB_OPTIONS_ERROR bab_options_error_quark()
 
-enum BabOptionsError {
+enum BabOptionsError
+{
     BAB_OPTIONS_ERROR_PATH
 };
 
-typedef struct {
+typedef struct
+{
     gchar* path;
 } Options;
 

@@ -5,3 +5,7 @@ Create hashed chunks from file path
 Create file table
 Restore to path
 
+Useful Commands
+---------------
+
+G_MESSAGES_DEBUG=Babirusa G_MESSAGES_PREFIXED=all babirusa
