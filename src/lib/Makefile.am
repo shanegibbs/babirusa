@@ -5,11 +5,10 @@ else
 endif
 
 AM_CFLAGS += $(GLIB_CFLAGS)
+AM_CPPFLAGS = -DG_LOG_DOMAIN=\"Babirusa\"
 
 noinst_LIBRARIES = libbabirusa.a
 
 libbabirusa_a_SOURCES = \
 	$(libbabirusa_a_HEADERS) \
 	backup.c
-
-AM_CPPFLAGS = -DG_LOG_DOMAIN=\"Babirusa\"

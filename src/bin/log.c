@@ -4,15 +4,15 @@
 
 #include "log.h"
 
-gchar* log_timestamp() {
-    time_t t;
-    t = time(NULL);
+gchar* log_timestamp()
+{
+    time_t t = time(NULL);
 
     struct tm *tmp;
     tmp = localtime(&t);
     if (tmp == NULL)
     {
-        fprintf(stderr, "localtime");
+        fprintf(stderr, "localtime FAILED");
         exit(1);
     }
 
