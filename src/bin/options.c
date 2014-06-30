@@ -1,5 +1,5 @@
-#include <stdlib.h>
 #include <stdio.h>
+#include <glib.h>
 
 #include "options.h"
 
@@ -14,7 +14,7 @@ gboolean parse_args(int argc, char** argv, Options **opts, GError **error)
 
     GOptionContext *context;
 
-    Options *o = malloc(sizeof(Options));
+    Options *o = g_malloc(sizeof(Options));
     o->path = NULL;
 
     GOptionEntry entries[] =

@@ -17,7 +17,7 @@ gchar* log_timestamp()
     }
 
     int buflen = 25;
-    gchar *timebuf = malloc(sizeof(gchar) * buflen);
+    gchar *timebuf = g_malloc(sizeof(gchar) * buflen);
     int used = strftime(timebuf, buflen, "%F %T", tmp);
     g_assert(used > 0);
 
@@ -56,4 +56,5 @@ void log_handler(const gchar *log_domain, GLogLevelFlags log_level, const gchar 
     }
 
     printf("%-3d %s [%d] %-5s - %s\n", i++, timebuf, getpid(), level, message);
+    g_free(timebuf);
 }

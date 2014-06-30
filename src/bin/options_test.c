@@ -8,7 +8,7 @@ void optionsPathTest(void)
     GError *error = NULL;
     char* argv[] =
     {
-        "test", "-p", "."
+        "test", "-p", "my-path"
     };
     int argc = 3;
     Options *opts = NULL;
@@ -22,7 +22,7 @@ void optionsPathTest(void)
     g_assert_null(error);
     g_assert_nonnull(opts);
 
-    g_assert_cmpstr(".", == , opts->path);
+    g_assert_cmpstr("my-path", == , opts->path);
 }
 
 int main(int argc, char** argv)

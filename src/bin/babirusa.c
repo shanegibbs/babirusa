@@ -1,54 +1,14 @@
-#include <glib/gstdio.h>
 #include <stdio.h>
 #include <stdlib.h>
 
 #include "log.h"
 #include "options.h"
-
-void scan_dir(const gchar *p)
-{
-    g_assert(p != NULL);
-
-    GError *err = NULL;
-
-    GDir *dir = g_dir_open(p, 0, &err);
-    if (err != NULL)
-    {
-        g_assert(dir == NULL);
-        fprintf(stderr, "%s\n", err->message);
-        g_error_free(err);
-        return;
-    }
-    g_assert(dir != NULL);
-
-    const gchar *d;
-    gchar *full = malloc(1024);
-    while ((d = g_dir_read_name(dir)) != NULL)
-    {
-        sprintf(full, "%s/%s", p, d);
-        g_debug("%s", full);
-
-        GStatBuf s;
-        if (g_stat(full, &s) == -1)
-        {
-            printf("FAILED\n");
-            return;
-        }
-
-        if ((s.st_mode & S_IFMT) == S_IFDIR)
-        {
-            scan_dir(full);
-        }
-
-        //scan_dir(d);
-    }
-    g_dir_close(dir);
-}
+#include "backup.h"
 
 int main(int argc, char** argv)
 {
     g_log_set_handler(G_LOG_DOMAIN, G_LOG_LEVEL_MASK, log_handler, NULL);
-    // g_log_set_handler(G_LOG_DOMAIN, G_LOG_LEVEL_DEBUG,  g_log_default_handler, NULL);
+    // g_log_set_handler(G_LOG_DOMAIN, G_LOG_LEVEL_DEBUG,  log_handler, NULL);
 
     g_message("Starting");
 
@@ -66,7 +26,9 @@ int main(int argc, char** argv)
     g_assert(error == NULL);
 
     g_message("Path: '%s'", opts->path);
-    scan_dir(opts->path);
+    backup_to_path(opts->path, "target/data");
+
+    g_free(opts);
 
     g_message("Ended successfully");
     return 0;
