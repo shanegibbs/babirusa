@@ -30,19 +30,16 @@ if test "x$have_libglib" = xno ; then
   AC_MSG_FAILURE([no glib-2.0 found. You probably need to install libglib2.0-dev])
 fi
 
-# Check for openssl
-PKG_CHECK_MODULES([SSL], [openssl], [have_libssl=yes], [have_libssl=no])
-AM_CONDITIONAL([SSL],  [test "$have_libssl" = "yes"])
-
-if test "x$have_libgssl" = xno ; then
-  AC_MSG_FAILURE([no openssl found. You probably need to install openssl and libssl-dev])
-fi
-
 # Checks for header files.
 AC_HEADER_STDC
 AC_CHECK_HEADERS([stdio.h])
 AC_CHECK_HEADERS([stdlib.h])
-AC_CHECK_HEADERS([openssl/md5.h])
+
+# Checks for berkeley db
+AC_SEARCH_LIBS([db_create], [db db-5.3], [], [
+  AC_MSG_ERROR([unable to find the db_create() function])
+])
+AC_CHECK_HEADER([db.h])
 
 # Checks for typedefs, structures, and compiler characteristics.
 AC_TYPE_SIZE_T

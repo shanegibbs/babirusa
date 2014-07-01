@@ -52,14 +52,14 @@ void bab_file_scan(const gchar *p, FileScanCallback callback)
 
 unsigned char bab_digest_length()
 {
-    return SHA256_DIGEST_LENGTH;
+    return g_checksum_type_get_length(G_CHECKSUM_SHA256);
 }
 
 gchar* bab_files_get_sha256_hex(unsigned char *c)
 {
-    char* str = (char*)g_malloc((2 * SHA256_DIGEST_LENGTH) + 1);
+    char* str = (char*)g_malloc((2 * bab_digest_length()) + 1);
     char* ptr = str;
-    for (int i = 0; i < SHA256_DIGEST_LENGTH; i++)
+    for (int i = 0; i < bab_digest_length(); i++)
     {
         ptr += sprintf(ptr, "%02x", c[i]);
     }
@@ -77,21 +77,24 @@ unsigned char* bab_files_calc_file_hash(gchar *filename)
         return NULL;
     }
 
-    SHA256_CTX context;
-    SHA256_Init(&context);
+    GChecksum *checksum = g_checksum_new(G_CHECKSUM_SHA256);
 
     int bytes;
     unsigned char data[1024];
     while ((bytes = fread (data, 1, 1024, inFile)) != 0)
-        SHA256_Update (&context, data, bytes);
+    {
+        g_checksum_update(checksum, data, bytes);
+    }
 
-    unsigned char *c = g_malloc(SHA256_DIGEST_LENGTH);
-    SHA256_Final(c, &context);
+    gsize buflen = bab_digest_length();
+    unsigned char *c = g_malloc(bab_digest_length());
+    g_checksum_get_digest(checksum, c, &buflen);
 
     fclose(inFile);
 
     return c;
 }
+
 
 
 

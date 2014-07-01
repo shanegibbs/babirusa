@@ -13,7 +13,6 @@ babirusa_SOURCES = babirusa.c
 babirusa_LDADD = libbabirusa_bin.a
 babirusa_LDADD += $(top_builddir)/src/lib/libbabirusa.a $(AM_LDFLAGS)
 babirusa_LDADD += $(GLIB_LIBS)
-babirusa_LDADD += $(SSL_LIBS)
 
 noinst_LIBRARIES = libbabirusa_bin.a
 
