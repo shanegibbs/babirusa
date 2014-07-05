@@ -12,7 +12,7 @@ void process_file(gchar* filename, struct stat *s);
 void upload_file(Info *info);
 void add_file(Info *info);
 
-gboolean backup_to_path(gchar *from_path, gchar *backup_repo_path)
+gboolean backup_to_path(const gchar *from_path, gchar *backup_repo_path)
 {
     g_debug("Starting backup from [%s] to repo at [%s]", from_path, backup_repo_path);
 
@@ -52,7 +52,7 @@ void add_file(Info *info)
 {
 
     // BabRegistry *reg = 
-    g_object_new(BAB_TYPE_REGISTRY, NULL);
+    // g_object_new(BAB_TYPE_REGISTRY, NULL);
 
     DB *dbp;
     u_int32_t flags;

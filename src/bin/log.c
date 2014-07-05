@@ -1,6 +1,7 @@
 #include <unistd.h>
 #include <stdio.h>
 #include <stdlib.h>
+#include <glib.h>
 
 #include "log.h"
 
@@ -22,6 +23,19 @@ gchar* log_timestamp()
     g_assert(used > 0);
 
     return timebuf;
+}
+
+void log_set_level(const gchar *level)
+{
+    if (g_strcmp0(level, "debug") == 0)
+    {
+        g_log_set_handler(G_LOG_DOMAIN, G_LOG_LEVEL_MASK, log_handler, NULL);
+    }
+    else
+    {
+        g_log_set_handler(G_LOG_DOMAIN, G_LOG_LEVEL_MESSAGE, log_handler, NULL);
+    }
+
 }
 
 void log_handler(const gchar *log_domain, GLogLevelFlags log_level, const gchar *message, gpointer user_data)

@@ -7,11 +7,6 @@
 
 int main(int argc, char** argv)
 {
-    g_log_set_handler(G_LOG_DOMAIN, G_LOG_LEVEL_MASK, log_handler, NULL);
-    // g_log_set_handler(G_LOG_DOMAIN, G_LOG_LEVEL_DEBUG,  log_handler, NULL);
-
-    g_message("Starting");
-
     GError *error = NULL;
     Options *opts = NULL;
 
@@ -25,12 +20,13 @@ int main(int argc, char** argv)
     g_assert(opts != NULL);
     g_assert(error == NULL);
 
+    log_set_level(opts->level);
+
     g_message("Path: '%s'", opts->path);
     backup_to_path(opts->path, "target/data");
 
-    g_free(opts);
+    options_free(opts);
 
     g_message("Ended successfully");
     return 0;
 }
-

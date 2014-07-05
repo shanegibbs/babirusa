@@ -20,6 +20,7 @@ gboolean parse_args(int argc, char** argv, Options **opts, GError **error)
     GOptionEntry entries[] =
     {
         { "path", 'p', 0, G_OPTION_ARG_FILENAME, &o->path, "Path to backup", "PATH" },
+        { "level", 'l', 0, G_OPTION_ARG_STRING, &o->level, "Log level", "LEVEL" },
         { NULL }
     };
 
@@ -41,4 +42,11 @@ gboolean parse_args(int argc, char** argv, Options **opts, GError **error)
     }
     *opts = o;
     return TRUE;
+}
+
+void options_free(Options *opts)
+{
+    g_free((gpointer)opts->path);
+    g_free((gpointer)opts->level);
+    g_free(opts);
 }

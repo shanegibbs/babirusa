@@ -9,7 +9,9 @@ enum BabOptionsError
 
 typedef struct
 {
-    gchar* path;
+    const gchar* path;
+    const gchar* level;
 } Options;
 
 gboolean parse_args(int argc, char** argv, Options **opts, GError **error);
+void options_free(Options *opts);

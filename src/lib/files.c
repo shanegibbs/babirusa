@@ -89,6 +89,7 @@ unsigned char* bab_files_calc_file_hash(gchar *filename)
     gsize buflen = bab_digest_length();
     unsigned char *c = g_malloc(bab_digest_length());
     g_checksum_get_digest(checksum, c, &buflen);
+    g_checksum_free(checksum);
 
     fclose(inFile);
 
