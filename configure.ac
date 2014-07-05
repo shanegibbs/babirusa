@@ -1,5 +1,7 @@
 #                                               -*- Autoconf -*-
 # Process this file with autoconf to produce a configure script.
+#
+# http://www.gnu.org/savannah-checkouts/gnu/autoconf/manual/autoconf-2.69/html_node/index.html
 
 AC_PREREQ([2.69])
 AC_INIT([babirusa], [0.1], [shane@gibbsdevops.com])
@@ -22,47 +24,59 @@ CFLAGS="$EXTERNAL_CFLAGS"
 # Use the C language and compiler for the following checks
 AC_LANG([C])
 
-# Checks for libraries.
-PKG_CHECK_MODULES([GLIB], [glib-2.0], [have_libglib=yes], [have_libglib=no])
-AM_CONDITIONAL([GLIB],  [test "$have_libglib" = "yes"])
-
-if test "x$have_libglib" = xno ; then
-  AC_MSG_FAILURE([no glib-2.0 found. You probably need to install libglib2.0-dev])
-fi
-
-# Checks for header files.
-AC_HEADER_STDC
-AC_CHECK_HEADERS([stdio.h])
-AC_CHECK_HEADERS([stdlib.h])
-
-# Checks for berkeley db
-AC_SEARCH_LIBS([db_create], [db db-5.3], [], [
-  AC_MSG_ERROR([unable to find the db_create() function])
-])
-AC_CHECK_HEADER([db.h])
-
 # Checks for typedefs, structures, and compiler characteristics.
 AC_TYPE_SIZE_T
 
 # Checks for library functions.
 AC_FUNC_MALLOC
 
-AC_CONFIG_FILES([Makefile src/lib/Makefile src/bin/Makefile])
-AC_OUTPUT
+# Checks for standard header files.
+AC_HEADER_STDC
+AC_CHECK_HEADERS([stdio.h])
+AC_CHECK_HEADERS([stdlib.h])
+
+# Checks for glib
+PKG_CHECK_MODULES([GLIB], [glib-2.0], [have_libglib=yes], [have_libglib=no])
+AM_CONDITIONAL([GLIB],  [test "$have_libglib" = "yes"])
+if test "x$have_libglib" = xno
+then
+  AC_MSG_FAILURE([no glib-2.0 found. You probably need to install libglib2.0-dev])
+fi
+
+# Checks for gobject
+PKG_CHECK_MODULES([GOBJECT], [gobject-2.0], [have_libgobject=yes], [have_libgobject=no])
+AM_CONDITIONAL([GOBJECT], [test "$have_libgobject" = "yes"])
+if test "$have_libgobject" = "no"
+then
+  AC_MSG_FAILURE([no gobject-2.0 libs found])
+fi
+
+# Checks for berkeley db
+AC_SEARCH_LIBS([db_create], [db-5.3 db], [], [
+  AC_MSG_ERROR([unable to find the db_create() function])
+])
+AC_CHECK_HEADER([db.h])
+if test "$ac_cv_header_db_h" = "no"
+then
+	AC_MSG_ERROR([Error, db.h is missing])
+fi
 
 # debug flag
-AC_ARG_ENABLE(debug,
-  AS_HELP_STRING(
-    [--enable-debug],
-    [enable debugging, default: no]),
-    [case "${enableval}" in
-      yes) debug=true ;;
-      no)  debug=false ;;
-      *)   AC_MSG_ERROR([bad value ${enableval} for --enable-debug]) ;;
-    esac],
-    [debug=false])
-AM_CONDITIONAL(DEBUG, test x"$debug" = x"true")
-AM_COND_IF(DEBUG,
-    AC_DEFINE(DEBUG, 1, [Define to 0 if this is a release build]),
-    AC_DEFINE(DEBUG, 0, [Define to 1 or higher if this is a debug build]))
+AC_ARG_ENABLE([debug],
+[  --enable-debug    Turn on debugging],
+[case "${enableval}" in
+  yes) debug=true ;;
+  no)  debug=false ;;
+  *) AC_MSG_ERROR([bad value ${enableval} for --enable-debug]) ;;
+esac],[debug=false])
+AM_CONDITIONAL([DEBUG], [test x$debug = xtrue])
 
+#AC_MSG_ERROR([wtf DEBUG])
+
+# Make AC_OUTPUT create each file by copying an input file (by default
+# file.in), substituting the output variable values
+AC_CONFIG_FILES([Makefile src/lib/Makefile src/bin/Makefile])
+
+# Generate config.status and launch it. Call this macro once, at the
+# end of configure.ac
+AC_OUTPUT

@@ -1,5 +1,5 @@
 if DEBUG
-  AM_CFLAGS =-I$(top_srcdir)/src/bin -I$(top_srcdir)/src/lib -Wall -Werror -g -O3
+  AM_CFLAGS =-I$(top_srcdir)/src/bin -I$(top_srcdir)/src/lib -Wall -Werror -g -O0
 else
   AM_CFLAGS =-I$(top_srcdir)/src/bin -I$(top_srcdir)/src/lib -Wall -Werror -O3
 endif
@@ -13,6 +13,7 @@ babirusa_SOURCES = babirusa.c
 babirusa_LDADD = libbabirusa_bin.a
 babirusa_LDADD += $(top_builddir)/src/lib/libbabirusa.a $(AM_LDFLAGS)
 babirusa_LDADD += $(GLIB_LIBS)
+babirusa_LDADD += $(GOBJECT_LIBS)
 
 noinst_LIBRARIES = libbabirusa_bin.a
 

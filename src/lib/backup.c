@@ -1,12 +1,12 @@
 #include <stdio.h>
 #include <glib.h>
 #include <stdlib.h>
+#include <db.h>
 
 #include "info.h"
 #include "backup.h"
 #include "files.h"
-
-#include <db.h>
+#include "registry.h"
 
 void process_file(gchar* filename, struct stat *s);
 void upload_file(Info *info);
@@ -50,6 +50,10 @@ void upload_file(Info *info)
 
 void add_file(Info *info)
 {
+
+    // BabRegistry *reg = 
+    g_object_new(BAB_TYPE_REGISTRY, NULL);
+
     DB *dbp;
     u_int32_t flags;
     int ret;

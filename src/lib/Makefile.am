@@ -1,7 +1,7 @@
 if DEBUG
-  AM_CFLAGS =-I$(top_srcdir)/src/lib -Wall -g -O3
+  AM_CFLAGS =-I$(top_srcdir)/src/lib -Wall -g -O0
 else
-  AM_CFLAGS =-I$(top_srcdir)/src/lib -Wall
+  AM_CFLAGS =-I$(top_srcdir)/src/lib -Wall -O3
 endif
 
 AM_CFLAGS += $(GLIB_CFLAGS)
@@ -14,4 +14,5 @@ libbabirusa_a_SOURCES = \
 	$(libbabirusa_a_HEADERS) \
 	backup.c \
 	files.c \
-	info.c
+	info.c \
+	registry.c
