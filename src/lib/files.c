@@ -4,7 +4,7 @@
 
 #include "files.h"
 
-void bab_file_scan(const gchar *p, FileScanCallback callback)
+void bab_file_scan(const gchar *p, FileScanCallback callback, void *data)
 {
     g_assert(p != NULL);
 
@@ -37,13 +37,13 @@ void bab_file_scan(const gchar *p, FileScanCallback callback)
         {
             if (callback != NULL)
             {
-                callback(full, &s);
+                callback(full, &s, data);
             }
         }
         else if (S_ISDIR(s.st_mode))
         {
             g_debug("Scanning %s", full);
-            bab_file_scan(full, callback);
+            bab_file_scan(full, callback, data);
         }
     }
     g_free(full);

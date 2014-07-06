@@ -6,6 +6,6 @@
 
 #include "registry.h"
 
-RegistryInterface* BerkeleyRegistry();
+Registry* BerkeleyRegistry();
 
 #endif

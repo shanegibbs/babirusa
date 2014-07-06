@@ -1,10 +1,10 @@
 #include "berkeley_registry.h"
 
-void* berkely_registry_new();
+void* berkely_registry_new(GError**);
 void berkely_registry_free(void *self);
 void berkely_registry_add(void *self, Info *info);
 
-RegistryInterface _BerkelyRegistryImpl =
+Registry BerkelyRegistryImpl =
 {
     berkely_registry_new,
     berkely_registry_free,
@@ -12,14 +12,14 @@ RegistryInterface _BerkelyRegistryImpl =
     NULL
 };
 
-RegistryInterface* BerkeleyRegistry()
+Registry* BerkeleyRegistry()
 {
-    return &_BerkelyRegistryImpl;
+    return &BerkelyRegistryImpl;
 }
 
-void* berkely_registry_new()
+void* berkely_registry_new(GError **error)
 {
-    RegistryInterface *s = g_memdup(&_BerkelyRegistryImpl, sizeof(RegistryInterface));
+    Registry *s = g_memdup(&BerkelyRegistryImpl, sizeof(Registry));
 
     s->data = NULL;
     return s;

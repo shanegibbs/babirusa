@@ -5,12 +5,12 @@
 
 #include "info.h"
 
-typedef struct _RegistryInterface
+typedef struct _Registry
 {
-    void* (*new)(void);
+    void* (*new)(GError**);
     void (*free)(void *self);
     void (*add)(void *self, Info *info);
     void *data;
-} RegistryInterface;
+} Registry;
 
 #endif

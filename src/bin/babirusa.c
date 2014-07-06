@@ -23,10 +23,24 @@ int main(int argc, char** argv)
 
     log_set_level(opts->level);
 
-    RegistryInterface *reg = BerkeleyRegistry()->new();
+    Registry *reg = NULL;
+    if ((reg = BerkeleyRegistry()->new(&error)) == NULL)
+    {
+        g_assert(reg == NULL && error != NULL);
+    }
+
+    g_assert(reg != NULL && error == NULL);
 
     g_message("Path: '%s'", opts->path);
-    backup_to_path(opts->path, "target/data", reg);
+
+    BackupEngine *e = DefaultBackupEngine()->new(NULL);
+    g_assert(e != NULL);
+    e->set_registry(e, reg);
+    e->backup_to_path(e, opts->path, "target/data");
+
+    // backup_to_path(opts->path, "target/data", reg);
+
+    e->free(e);
 
     reg->free(reg);
     g_free(reg);

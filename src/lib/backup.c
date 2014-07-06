@@ -7,28 +7,76 @@
 #include "files.h"
 #include "registry.h"
 
-void process_file(gchar* filename, struct stat *s);
-void upload_file(Info *info);
-void add_file(Info *info);
-
-RegistryInterface *reg;
-
-gboolean backup_to_path(const gchar *from_path, gchar *backup_repo_path, RegistryInterface *registry)
+typedef struct _Data
 {
-    g_debug("Starting backup from [%s] to repo at [%s]", from_path, backup_repo_path);
-    reg = registry;
+    Registry *registry;
+} Data;
 
-    bab_file_scan(from_path, &process_file);
+// public functions
+void* backup_engine_new(GError**);
+void backup_engine_free(void *self);
+void backup_engine_set_registry(void *self, Registry*);
+gboolean backup_engine_backup_to_path(void *self, const gchar *from, gchar *to);
 
-    // for each source file
-    // - create hash
-    // - add file to index
-    // - add file to data path
+// private functions
+void process_file(gchar* filename, struct stat *s, void*);
+
+BackupEngine DefaultBackupEngineImpl =
+{
+    backup_engine_new,
+    backup_engine_free,
+    backup_engine_set_registry,
+    backup_engine_backup_to_path,
+    NULL
+};
+
+Data* get_data(BackupEngine *e)
+{
+    g_assert(e != NULL);
+    g_assert(e->data != NULL);
+    return e->data;
+}
+
+BackupEngine* DefaultBackupEngine()
+{
+    return &DefaultBackupEngineImpl;
+}
+
+void* backup_engine_new(GError **error)
+{
+    g_debug("Creating new DefaultBackupEngine");
+
+    BackupEngine *n = g_memdup(&DefaultBackupEngineImpl, sizeof(BackupEngine));
+    n->data = g_malloc(sizeof(Data));
+    return n;
+}
+
+void backup_engine_free(void *self)
+{
+    g_free(get_data(self));
+    g_free(self);
+}
+
+void backup_engine_set_registry(void *self, Registry* reg)
+{
+    g_assert(self != NULL);
+    g_assert(reg != NULL);
+
+    Data *data = get_data(self);
+    data->registry = reg;
+}
+
+gboolean backup_engine_backup_to_path(void *self, const gchar *from, gchar *to)
+{
+    g_message("Starting backup from [%s] to repo at [%s]", from, to);
+
+    Data *data = get_data(self);
+    bab_file_scan(from, &process_file, data->registry);
 
     return TRUE;
 }
 
-void process_file(gchar* filename, struct stat *s)
+void process_file(gchar* filename, struct stat *s, void *r)
 {
     g_debug("Processing file %s", filename);
 
@@ -38,14 +86,8 @@ void process_file(gchar* filename, struct stat *s)
 
     bab_info_log(info);
 
-    // do stuff with info...
-
-    upload_file(info);
+    Registry *reg = r;
     reg->add(reg, info);
 
     bab_info_free(info);
-}
-
-void upload_file(Info *info)
-{
 }
