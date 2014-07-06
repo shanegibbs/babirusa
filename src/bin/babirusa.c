@@ -8,6 +8,8 @@
 
 int main(int argc, char** argv)
 {
+    log_install_backtrace_printer();
+
     GError *error = NULL;
     Options *opts = NULL;
 

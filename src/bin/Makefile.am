@@ -1,7 +1,7 @@
 if DEBUG
-  AM_CFLAGS =-I$(top_srcdir)/src/bin -I$(top_srcdir)/src/lib -Wall -Werror -g -O0
+  AM_CFLAGS =-I$(top_srcdir)/src/bin -I$(top_srcdir)/src/lib -Wall -Werror -g -O0 -rdynamic
 else
-  AM_CFLAGS =-I$(top_srcdir)/src/bin -I$(top_srcdir)/src/lib -Wall -Werror -O3
+  AM_CFLAGS =-I$(top_srcdir)/src/bin -I$(top_srcdir)/src/lib -O3 -DG_DISABLE_ASSERT
 endif
 
 AM_CFLAGS += $(GLIB_CFLAGS)

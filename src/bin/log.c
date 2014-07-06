@@ -2,6 +2,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <glib.h>
+#include <execinfo.h>
 
 #include "log.h"
 
@@ -25,6 +26,26 @@ gchar* log_timestamp()
     return timebuf;
 }
 
+void backtrace_printer(int sig)
+{
+    void *array[10];
+    size_t size;
+
+    // get void*'s for all entries on the stack
+    size = backtrace(array, 10);
+
+    // print out all the frames to stderr
+    fprintf(stderr, "\nPrinting stack trace. signal %d:\n", sig);
+    backtrace_symbols_fd(array, size, STDERR_FILENO);
+    exit(1);
+}
+
+void log_install_backtrace_printer()
+{
+    signal(SIGSEGV, backtrace_printer);
+    signal(SIGABRT, backtrace_printer);
+}
+
 void log_set_level(const gchar *level)
 {
     if (g_strcmp0(level, "debug") == 0)
@@ -36,6 +57,7 @@ void log_set_level(const gchar *level)
         g_log_set_handler(G_LOG_DOMAIN, G_LOG_LEVEL_MESSAGE, log_handler, NULL);
     }
 
+    // g_log_set_handler(G_LOG_DOMAIN, G_LOG_LEVEL_ERROR, log_handler, NULL);
 }
 
 void log_handler(const gchar *log_domain, GLogLevelFlags log_level, const gchar *message, gpointer user_data)

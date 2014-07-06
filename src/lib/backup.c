@@ -30,7 +30,7 @@ BackupEngine DefaultBackupEngineImpl =
     NULL
 };
 
-Data* get_data(BackupEngine *e)
+static Data* get_data(BackupEngine *e)
 {
     g_assert(e != NULL);
     g_assert(e->data != NULL);
@@ -80,10 +80,22 @@ void process_file(gchar* filename, struct stat *s, void *r)
 {
     g_debug("Processing file %s", filename);
 
-    Checksum *chksum = bab_files_calc_file_hash(filename);
+    GError *error = NULL;
+
+    Checksum *chksum = bab_files_calc_file_hash(filename, &error);
+    g_assert((chksum == NULL && error != NULL) || (chksum != NULL && error == NULL));
+    if (error != NULL) {
+        g_warning("Unable to process file %s: %s", filename, error->message);
+        return;
+    }
+
+    g_assert(filename != NULL);
+    g_assert(s != NULL);
+    g_assert(chksum != NULL);
     Info *info = bab_info_new(filename, s->st_size, s->st_mtime, chksum);
     g_free(chksum);
 
+    g_assert(info != NULL);
     bab_info_log(info);
 
     Registry *reg = r;

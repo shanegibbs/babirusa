@@ -1,8 +1,16 @@
 #include <glib.h>
 #include <glib/gstdio.h>
 #include <openssl/sha.h>
+#include <string.h>
+#include <errno.h>
 
 #include "files.h"
+#include "info.h"
+
+GQuark bab_files_error_quark()
+{
+    return g_quark_from_static_string("bab-files-error-quark");
+}
 
 void bab_file_scan(const gchar *p, FileScanCallback callback, void *data)
 {
@@ -57,6 +65,8 @@ unsigned char bab_digest_length()
 
 gchar* bab_files_get_sha256_hex(unsigned char *c)
 {
+    g_assert(c != NULL);
+
     char* str = (char*)g_malloc((2 * bab_digest_length()) + 1);
     char* ptr = str;
     for (int i = 0; i < bab_digest_length(); i++)
@@ -68,12 +78,13 @@ gchar* bab_files_get_sha256_hex(unsigned char *c)
     return str;
 }
 
-unsigned char* bab_files_calc_file_hash(gchar *filename)
+Checksum* bab_files_calc_file_hash(gchar *filename, GError **err)
 {
-    FILE *inFile = fopen (filename, "rb");
+    FILE *inFile = fopen(filename, "rb");
     if (inFile == NULL)
     {
-        printf ("%s can't be opened.\n", filename);
+        gchar* error_str = strerror(errno);
+        g_set_error(err, BAB_FILES_ERROR, BAB_FILES_ERROR_OPEN_FAILED, "%s", error_str);
         return NULL;
     }
 
@@ -93,6 +104,7 @@ unsigned char* bab_files_calc_file_hash(gchar *filename)
 
     fclose(inFile);
 
+    g_assert(c != NULL);
     return c;
 }
 

@@ -21,6 +21,9 @@ void bab_info_free(Info *info)
 
 void bab_info_log(Info *info)
 {
+    g_assert(info != NULL);
+    g_assert(info->checksum != NULL);
+
     gchar *hex = bab_files_get_sha256_hex(info->checksum);
     g_debug("Info: filename=%s, size=%d, mtime=%d, checksum=%s", info->filename, info->size, info->mtime, hex);
     g_free(hex);
