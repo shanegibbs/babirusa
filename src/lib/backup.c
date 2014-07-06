@@ -12,9 +12,12 @@ void process_file(gchar* filename, struct stat *s);
 void upload_file(Info *info);
 void add_file(Info *info);
 
-gboolean backup_to_path(const gchar *from_path, gchar *backup_repo_path)
+RegistryInterface *reg;
+
+gboolean backup_to_path(const gchar *from_path, gchar *backup_repo_path, RegistryInterface *registry)
 {
     g_debug("Starting backup from [%s] to repo at [%s]", from_path, backup_repo_path);
+    reg = registry;
 
     bab_file_scan(from_path, &process_file);
 
@@ -51,8 +54,12 @@ void upload_file(Info *info)
 void add_file(Info *info)
 {
 
-    // BabRegistry *reg = 
-    // g_object_new(BAB_TYPE_REGISTRY, NULL);
+    // void *reg = new(Registry);
+    // g_assert(sizeof(reg) != sizeOf(reg));
+    // delete(reg);
+
+    // RegistryInterface *reg = Berkeley->new();
+    reg->add(reg, info);
 
     DB *dbp;
     u_int32_t flags;
