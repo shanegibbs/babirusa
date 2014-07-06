@@ -1,3 +1,5 @@
+#include <string.h>
+
 #include "berkeley_registry.h"
 
 void* berkely_registry_new(GError**);
@@ -50,6 +52,28 @@ void berkely_registry_add(void *self, Info *info)
         g_error("failed to open db");
     }
 
+    DBT key, data;
+    // g_memset(&key, 0, sizeof(DBT));
+    // g_memset(&data, 0, sizeof(DBT));
+
+    key.data = info->filename;
+    key.size = strlen(info->filename) + 1;
+    data.data = 0;
+    data.size = 1;
+
+    ret = dbp->put(dbp, NULL, &key, &data, 0);
+    if (ret == DB_KEYEXIST)
+    {
+        dbp->err(dbp, ret, "Put failed because key %s already exists", info->filename);
+    }
+    else if (ret == 0)
+    {
+        g_message("record stored");
+    }
+    else
+    {
+        g_warning("put returned %d", ret);
+    }
 
     dbp->close(dbp, 0);
 }
