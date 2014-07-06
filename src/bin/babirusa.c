@@ -23,7 +23,7 @@ int main(int argc, char** argv)
 
     log_set_level(opts->level);
 
-    RegistryInterface *reg = Berkeley->new();
+    RegistryInterface *reg = BerkeleyRegistry()->new();
 
     g_message("Path: '%s'", opts->path);
     backup_to_path(opts->path, "target/data", reg);

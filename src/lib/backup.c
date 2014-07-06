@@ -1,7 +1,6 @@
 #include <stdio.h>
 #include <glib.h>
 #include <stdlib.h>
-#include <db.h>
 
 #include "info.h"
 #include "backup.h"
@@ -42,7 +41,7 @@ void process_file(gchar* filename, struct stat *s)
     // do stuff with info...
 
     upload_file(info);
-    add_file(info);
+    reg->add(reg, info);
 
     bab_info_free(info);
 }
@@ -50,37 +49,3 @@ void process_file(gchar* filename, struct stat *s)
 void upload_file(Info *info)
 {
 }
-
-void add_file(Info *info)
-{
-
-    // void *reg = new(Registry);
-    // g_assert(sizeof(reg) != sizeOf(reg));
-    // delete(reg);
-
-    // RegistryInterface *reg = Berkeley->new();
-    reg->add(reg, info);
-
-    DB *dbp;
-    u_int32_t flags;
-    int ret;
-
-    ret = db_create(&dbp, NULL, 0);
-    if (ret != 0)
-    {
-        g_error("failed to create db");
-    }
-
-    flags = DB_CREATE;
-    ret = dbp->open(dbp, NULL, "my_db.db", NULL, DB_BTREE, flags, 0);
-    if (ret != 0)
-    {
-        g_error("failed to open db");
-    }
-
-
-    dbp->close(dbp, 0);
-}
-
-
-

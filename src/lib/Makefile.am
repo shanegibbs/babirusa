@@ -15,4 +15,4 @@ libbabirusa_a_SOURCES = \
 	backup.c \
 	files.c \
 	info.c \
-	registry.c
+	berkeley_registry.c
