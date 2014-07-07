@@ -7,10 +7,11 @@ Planning
 * Backup to S3
 
 Scan logic:
-- [x] Scan for filename and mtime.
-- [ ] Check mtime and size with db. If size change, backup file.
- - [ ] If no change, continue.
- - [ ] If change, check hash
+- [x] Scan for filename, mtime and length
+- [ ] Add to db
+- [ ] Check info with db. If size change, backup file.
+ - [ ] If no mtime change, continue.
+ - [ ] If mtime change, check hash
   - [ ] If hash changed, backup file.
   - [ ] If no change, update mtime
 
