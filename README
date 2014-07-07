@@ -8,10 +8,10 @@ Restore to path
 Scan logic:
 * Scan for filename and mtime.
 * Check mtime and size with db. If size change, backup file.
-** If no change, continue.
-** If change, check hash
-*** If hash changed, backup file.
-*** If no change, update mtime
+ * If no change, continue.
+ * If change, check hash
+  * If hash changed, backup file.
+  * If no change, update mtime
 
 Backup logic:
 
