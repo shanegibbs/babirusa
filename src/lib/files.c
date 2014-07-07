@@ -35,9 +35,11 @@ void bab_file_scan(const gchar *p, FileScanCallback callback, void *data)
         sprintf(full, "%s/%s", p, d);
 
         GStatBuf s;
-        if (g_stat(full, &s) == -1)
+
+        if (g_lstat(full, &s) == -1)
         {
-            printf("FAILED\n");
+            gchar* error_str = strerror(errno);
+            g_warning("Failed to stat file %s: %s\n", full, error_str);
             return;
         }
 
@@ -47,6 +49,10 @@ void bab_file_scan(const gchar *p, FileScanCallback callback, void *data)
             {
                 callback(full, &s, data);
             }
+        }
+        else if (S_ISLNK(s.st_mode))
+        {
+            g_message("Skipping link %s", full);
         }
         else if (S_ISDIR(s.st_mode))
         {
