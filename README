@@ -5,14 +5,24 @@
 * Restore to path
 * Backup to S3
 
-## Scan logic:
+## Scan logic
 
 - [x] Scan for filename, mtime and length
 - [ ] Add to db
-- [ ] Check info with db. If size change, backup file.
-  - [ ] If no mtime change, continue.
+- [ ] Check info with db. If size change, backup file
+  - [ ] If no mtime change, continue
   - [ ] If mtime change, check hash
-    - [ ] If hash changed, backup file.
+    - [ ] If hash changed, backup file
     - [ ] If no change, update mtime
 
-## Backup logic:
+## Backup logic
+
+* Needs to handle new files, deleted files and changed files
+* Produce different versions of a single file
+
+Record:
+* filename
+* size
+* mtime
+* hash
+* deleted_at
