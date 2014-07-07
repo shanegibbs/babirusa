@@ -1,9 +1,10 @@
 Planning
 --------
 
-Create hashed chunks from file path
-Create file table
-Restore to path
+* Create file table
+* Backup to path
+* Restore to path
+* Backup to S3
 
 Scan logic:
 - [x] Scan for filename and mtime.
@@ -14,9 +15,3 @@ Scan logic:
   - [ ] If no change, update mtime
 
 Backup logic:
-
-
-Useful Commands
----------------
-
-G_MESSAGES_DEBUG=Babirusa G_MESSAGES_PREFIXED=all babirusa
