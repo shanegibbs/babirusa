@@ -40,8 +40,6 @@ int main(int argc, char** argv)
     e->set_registry(e, reg);
     e->backup_to_path(e, opts->path, "target/data");
 
-    // backup_to_path(opts->path, "target/data", reg);
-
     e->free(e);
 
     reg->free(reg);

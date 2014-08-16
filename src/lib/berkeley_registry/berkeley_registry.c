@@ -1,6 +1,9 @@
+#include <db.h>
 #include <string.h>
 
-#include "berkeley_registry.h"
+#include "registry.h"
+
+#include "berkeley_registry_model.h"
 
 static void* berkely_registry_new(GError**);
 static void berkely_registry_free(void *self);
@@ -132,7 +135,7 @@ static void berkely_registry_add(void *self, Info *info)
     data.size = sizeof("apple");
 
     if ((ret = dbp->put(dbp, NULL, &key, &data, 0)) == 0)
-        g_debug("db: %s: key stored", (char*)key.data);
+        g_debug("db: '%s' key stored", (char*)key.data);
     else
     {
         dbp->err(dbp, ret, "DB->put");

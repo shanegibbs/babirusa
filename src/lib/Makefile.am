@@ -1,3 +1,5 @@
+SUBDIRS=berkeley_registry
+
 if DEBUG
   AM_CFLAGS =-I$(top_srcdir)/src/lib -Wall -Werror -g -O0 -rdynamic
 else
@@ -14,5 +16,4 @@ libbabirusa_a_SOURCES = \
 	$(libbabirusa_a_HEADERS) \
 	backup.c \
 	files.c \
-	info.c \
-	berkeley_registry.c
+	info.c
