@@ -40,6 +40,15 @@ gboolean parse_args(int argc, char** argv, Options **opts, GError **error)
         g_set_error(error, BAB_OPTIONS_ERROR, BAB_OPTIONS_ERROR_PATH, "No path specified");
         return FALSE;
     }
+
+    if (o->level == NULL)
+    {
+        o->level = "info";
+    }
+
+    g_assert(o->path != NULL);
+    g_assert(o->level != NULL);
+
     *opts = o;
     return TRUE;
 }

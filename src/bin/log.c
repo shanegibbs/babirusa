@@ -36,6 +36,7 @@ void backtrace_printer(int sig)
 
     // print out all the frames to stderr
     fprintf(stderr, "\nPrinting stack trace. signal %d:\n", sig);
+
     backtrace_symbols_fd(array, size, STDERR_FILENO);
     exit(1);
 }
@@ -48,6 +49,8 @@ void log_install_backtrace_printer()
 
 void log_set_level(const gchar *level)
 {
+    g_assert(level != NULL);
+
     if (g_strcmp0(level, "debug") == 0)
     {
         g_log_set_handler(G_LOG_DOMAIN, G_LOG_LEVEL_MASK, log_handler, NULL);

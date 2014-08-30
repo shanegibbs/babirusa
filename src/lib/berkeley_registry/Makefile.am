@@ -1,11 +1,9 @@
+AM_CFLAGS = $(GLIB_CFLAGS) -I$(top_srcdir)/src/lib -I$(top_srcdir)/src/lib/berkeley_registry
 if DEBUG
-  AM_CFLAGS =-I$(top_srcdir)/src/lib -I$(top_srcdir)/src/lib/berkeley_registry -Wall -Werror -g -O0 -rdynamic
+  AM_CFLAGS += @BAB_DEBUG_CFLAGS@
 else
-  AM_CFLAGS =-I$(top_srcdir)/src/lib -I$(top_srcdir)/src/lib/berkeley_registry -O3 -DG_DISABLE_ASSERT
+  AM_CFLAGS += @BAB_CFLAGS@
 endif
-
-AM_CFLAGS += $(GLIB_CFLAGS)
-AM_CPPFLAGS = -DG_LOG_DOMAIN=\"Babirusa\"
 
 noinst_LIBRARIES = libbabirusa-berkeley-registry.a
 

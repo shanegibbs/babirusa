@@ -61,6 +61,9 @@ then
 	AC_MSG_ERROR([Error, db.h is missing])
 fi
 
+AC_SUBST([BAB_CFLAGS], ["-DG_LOG_DOMAIN=\\\"Babirusa\\\" -O3 -DG_DISABLE_ASSERT"])
+AC_SUBST([BAB_DEBUG_CFLAGS], ["-DG_LOG_DOMAIN=\\\"Babirusa\\\" -Wall -Werror -g -O1"])
+
 # debug flag
 AC_ARG_ENABLE([debug],
 [  --enable-debug    Turn on debugging],

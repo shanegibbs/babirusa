@@ -1,3 +1,25 @@
+# Development Setup
+
+## Ubuntu
+
+```
+% apt-get install libdb5.3 libdb5.3-dev
+% apt-get install libglib2.0-dev
+% mkdir build-ubuntu
+% cd build-ubuntu
+% CFLAGS=-rdynamic ../configure --enable-debug
+% make
+```
+
+## Mac
+
+```
+% mkdir build-mac
+% cd build-mac
+% ../configure --enable-debug
+% make
+```
+
 # Planning
 
 * Create file table

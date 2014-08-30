@@ -1,11 +1,9 @@
+AM_CFLAGS = $(GLIB_CFLAGS) -I$(top_srcdir)/src/bin -I$(top_srcdir)/src/lib -I$(top_srcdir)/src/lib/berkeley_registry
 if DEBUG
-  AM_CFLAGS =-I$(top_srcdir)/src/bin -I$(top_srcdir)/src/lib -I$(top_srcdir)/src/lib/berkeley_registry -Wall -Werror -g -O0 -rdynamic
+  AM_CFLAGS += @BAB_DEBUG_CFLAGS@
 else
-  AM_CFLAGS =-I$(top_srcdir)/src/bin -I$(top_srcdir)/src/lib -I$(top_srcdir)/src/lib/berkeley_registry -O3 -DG_DISABLE_ASSERT
+  AM_CFLAGS += @BAB_CFLAGS@
 endif
-
-AM_CFLAGS += $(GLIB_CFLAGS)
-AM_CPPFLAGS = -DG_LOG_DOMAIN=\"Babirusa\"
 
 bin_PROGRAMS = babirusa
 
@@ -25,5 +23,6 @@ TESTS=$(check_PROGRAMS)
 check_PROGRAMS=options_test
 
 options_test_SOURCES = options_test.c
+options_test_CFLAGS = $(DEBUG_CFLAGS) $(GLIB_CFLAGS)
 options_test_LDADD = libbabirusa_bin.a
 options_test_LDADD += $(GLIB_LIBS)

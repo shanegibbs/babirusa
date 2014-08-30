@@ -1,7 +1,7 @@
 SUBDIRS=src/lib src/bin
 
-run: all
+run: all check
 	./src/bin/babirusa -p test
 
-run-debug: all
+run-debug: all check
 	./src/bin/babirusa -p test -l debug
