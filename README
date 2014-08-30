@@ -13,6 +13,8 @@
 
 ## Mac
 
+gdb has been replaced with lldb
+
 ```
 % mkdir build-mac
 % cd build-mac

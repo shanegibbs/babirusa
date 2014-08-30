@@ -16,6 +16,7 @@ gboolean parse_args(int argc, char** argv, Options **opts, GError **error)
 
     Options *o = g_malloc(sizeof(Options));
     o->path = NULL;
+    o->level = NULL;
 
     GOptionEntry entries[] =
     {
@@ -43,7 +44,7 @@ gboolean parse_args(int argc, char** argv, Options **opts, GError **error)
 
     if (o->level == NULL)
     {
-        o->level = "info";
+        o->level = g_strdup("info");
     }
 
     g_assert(o->path != NULL);
