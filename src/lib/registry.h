@@ -5,7 +5,7 @@
 
 #include "info.h"
 
-typedef struct _Registry
+typedef struct Registry
 {
     void* (*new)(GError**);
     void (*free)(void *self);

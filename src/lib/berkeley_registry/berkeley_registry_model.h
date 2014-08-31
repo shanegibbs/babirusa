@@ -4,26 +4,26 @@
 //       \_ version 1
 // \_ branch Downloads
 
-typedef struct branch_struct Branch;
-typedef struct leaf_struct Leaf;
-typedef struct version_struct Version;
+typedef struct Branch Branch;
+typedef struct Leaf Leaf;
+typedef struct Version Version;
 
-struct branch_struct
+struct Branch
 {
     gchar *name;
-    int parent;
-    int *branches;
-    int *leaves;
+    Branch *parent;
+    Branch *branches;
+    Leaf *leaves;
 };
 
-struct leaf_struct
+struct Leaf
 {
     gchar *name;
     Branch *parent;
     Version *versions;
 };
 
-struct version_struct
+struct Version
 {
     Leaf *parent;
     int size;
