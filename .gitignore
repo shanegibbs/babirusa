@@ -13,3 +13,5 @@ Makefile.in
 /build*
 /test-driver
 .DS_Store
+/html
+/latex

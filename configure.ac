@@ -62,7 +62,7 @@ then
 fi
 
 AC_SUBST([BAB_CFLAGS], ["-DG_LOG_DOMAIN=\\\"Babirusa\\\" -O3 -DG_DISABLE_ASSERT"])
-AC_SUBST([BAB_DEBUG_CFLAGS], ["-DG_LOG_DOMAIN=\\\"Babirusa\\\" -Wall -Werror -g -O1"])
+AC_SUBST([BAB_DEBUG_CFLAGS], ["-DG_LOG_DOMAIN=\\\"Babirusa\\\" -Wall -Werror -g -O0"])
 
 # debug flag
 AC_ARG_ENABLE([debug],
