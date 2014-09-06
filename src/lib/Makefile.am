@@ -1,16 +1,13 @@
-SUBDIRS=berkeley_registry
+SUBDIRS=common berkeley_registry
 
-AM_CFLAGS = -I$(top_srcdir)/src/lib $(GLIB_CFLAGS) $(SSL_CFLAGS)
+AM_CFLAGS = $(GLIB_CFLAGS) $(SSL_CFLAGS)
 if DEBUG
   AM_CFLAGS += @BAB_DEBUG_CFLAGS@
 else
   AM_CFLAGS += @BAB_CFLAGS@
 endif
 
-noinst_LIBRARIES = libbabirusa.a
+noinst_LIBRARIES = libbackup.a
 
-libbabirusa_a_SOURCES = \
-	$(libbabirusa_a_HEADERS) \
-	backup.c \
-	files.c \
-	info.c
+libbackup_a_CPPFLAGS = -I$(top_srcdir)/src/lib/common
+libbackup_a_SOURCES = backup.c

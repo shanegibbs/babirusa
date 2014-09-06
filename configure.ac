@@ -78,7 +78,13 @@ AM_CONDITIONAL([DEBUG], [test x$debug = xtrue])
 
 # Make AC_OUTPUT create each file by copying an input file (by default
 # file.in), substituting the output variable values
-AC_CONFIG_FILES([Makefile src/lib/berkeley_registry/Makefile src/lib/Makefile src/bin/Makefile])
+AC_CONFIG_FILES([
+                 Makefile
+                 src/lib/common/Makefile
+                 src/lib/berkeley_registry/Makefile
+                 src/lib/Makefile
+                 src/bin/Makefile
+                 ])
 
 # Generate config.status and launch it. Call this macro once, at the
 # end of configure.ac
