@@ -1,3 +1,6 @@
+#ifndef BERKELEY_REGISTRY_H
+#define BERKELEY_REGISTRY_H
+
 // branch 0
 // \_ branch Documents
 //    \_ leaf something.doc
@@ -30,3 +33,5 @@ struct Version
     int mtime;
     Checksum *checksum;
 };
+
+#endif

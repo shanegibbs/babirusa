@@ -8,8 +8,6 @@ endif
 noinst_LIBRARIES = libdbreg.a
 libdbreg_a_SOURCES = dbreg.c
 
-# tests
-
 TESTS=$(check_PROGRAMS)
 check_PROGRAMS=dbreg_test
 

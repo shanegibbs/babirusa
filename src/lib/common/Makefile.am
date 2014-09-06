@@ -11,3 +11,10 @@ libcommon_a_SOURCES = \
 	registry.h \
 	files.c \
 	info.c
+
+TESTS=$(check_PROGRAMS)
+check_PROGRAMS=info_test
+
+info_test_SOURCES = info_test.c
+info_test_LDADD = libcommon.a
+info_test_LDADD += $(GLIB_LIBS)
