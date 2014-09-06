@@ -3,7 +3,7 @@
 
 #include "registry.h"
 
-#include "berkeley_registry_model.h"
+#include "dbreg.h"
 
 static void* berkely_registry_new(GError**);
 static void berkely_registry_free(void *self);

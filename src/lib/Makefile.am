@@ -1,4 +1,4 @@
-SUBDIRS=common berkeley_registry
+SUBDIRS=common dbreg
 
 AM_CFLAGS = $(GLIB_CFLAGS) $(SSL_CFLAGS)
 if DEBUG

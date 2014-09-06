@@ -1,7 +1,7 @@
 #include <glib.h>
 #include <stdio.h>
 
-#include "berkeley_registry.h"
+#include "dbreg.h"
 
 void berkely_registry_add_test(void)
 {

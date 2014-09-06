@@ -1,4 +1,4 @@
-AM_CFLAGS = $(GLIB_CFLAGS) -I$(top_srcdir)/src/bin -I$(top_srcdir)/src/lib -I$(top_srcdir)/src/lib/berkeley_registry
+AM_CFLAGS = $(GLIB_CFLAGS) -I$(top_srcdir)/src/bin -I$(top_srcdir)/src/lib -I$(top_srcdir)/src/lib/dbreg
 if DEBUG
   AM_CFLAGS += @BAB_DEBUG_CFLAGS@
 else

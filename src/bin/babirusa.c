@@ -4,7 +4,7 @@
 #include "log.h"
 #include "options.h"
 #include "backup.h"
-#include "berkeley_registry.h"
+#include "dbreg.h"
 
 int main(int argc, char** argv)
 {

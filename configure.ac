@@ -81,7 +81,7 @@ AM_CONDITIONAL([DEBUG], [test x$debug = xtrue])
 AC_CONFIG_FILES([
                  Makefile
                  src/lib/common/Makefile
-                 src/lib/berkeley_registry/Makefile
+                 src/lib/dbreg/Makefile
                  src/lib/Makefile
                  src/bin/Makefile
                  ])
