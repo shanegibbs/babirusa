@@ -10,6 +10,7 @@ typedef struct Registry
     void* (*new)(GError**);
     void (*free)(void *self);
     void (*add)(void *self, Info *info);
+    Info* (*get)(void *self, const char* filename);
     void *data;
 } Registry;
 

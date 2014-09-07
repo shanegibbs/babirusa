@@ -83,6 +83,7 @@ void process_file(gchar* filename, struct stat *s, void *r)
     GError *error = NULL;
 
     Checksum *chksum = bab_files_calc_file_hash(filename, &error);
+    chksum = (Checksum*) bab_files_get_sha256_hex(chksum);
     g_assert((chksum == NULL && error != NULL) || (chksum != NULL && error == NULL));
     if (error != NULL) {
         g_warning("Unable to process file %s: %s", filename, error->message);
@@ -96,7 +97,7 @@ void process_file(gchar* filename, struct stat *s, void *r)
     g_free(chksum);
 
     g_assert(info != NULL);
-    bab_info_log(info);
+    bab_info_log("process_file", info);
 
     Registry *reg = r;
     reg->add(reg, info);

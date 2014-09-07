@@ -13,7 +13,7 @@ babirusa_LDADD = $(AM_LDFLAGS)
 babirusa_LDADD += libbabirusa_bin.a
 babirusa_LDADD += $(top_builddir)/src/lib/common/libcommon.a
 babirusa_LDADD += $(top_builddir)/src/lib/libbackup.a
-babirusa_LDADD += $(top_builddir)/src/lib/berkeley_registry/libbabirusa-berkeley-registry.a
+babirusa_LDADD += $(top_builddir)/src/lib/dbreg/libdbreg.a
 babirusa_LDADD += $(GLIB_LIBS)
 babirusa_LDADD += $(GOBJECT_LIBS)
 
