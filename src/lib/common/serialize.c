@@ -16,7 +16,7 @@ char* to_hex(char *mem, int count)
   for (i = 0; i < count; i++) {
     short offset = i * 3;
     char *tmp = g_malloc(sizeof(char) * 3);
-    sprintf(tmp, "%02x", p[i]);
+    sprintf(tmp, "%02X", p[i]);
     memcpy(output + offset, tmp, 2);
     g_free(tmp);
   }
@@ -24,10 +24,55 @@ char* to_hex(char *mem, int count)
   return output;
 }
 
+/* long zigzag32(long v)
+{
+  if (v < 0) {
+    return ((long) (-v)) * 2 - 1;
+  } else {
+    return v * 2;
+  }
+}*/
+
 void serialize_char(char i, char **cur)
 {
   **cur = i;
   (*cur)++;
+}
+
+static char read_char(char **cur)
+{
+  char i = **cur;
+  (*cur)++;
+  return i;
+}
+
+void write_ulong(unsigned long i, char **cur)
+{
+  while (i >= 0x80) {
+    serialize_char(i | 0x80, cur);
+    i >>= 7;
+  }
+  g_assert_cmpint(i, <, 0x80);
+  serialize_char(i, cur);
+}
+
+unsigned long read_ulong(char **cur)
+{
+  unsigned long i = 0;
+  unsigned char n;
+  // printf("i(0)=%lu\n", i);
+
+  int a = 0;
+  while ((n = read_char(cur)) >= 0x80) {
+    i |= (n & 0x7f) << (a++ * 7);
+    // printf("i(1)=%lu\n", i);
+    // printf("n=%d\n", n);
+  }
+
+  g_assert_cmpint(n, <, 0x80);
+  // printf("n=%d\n", n);
+  i |= n << (a * 7);
+  return i;
 }
 
 void serialize_ulong(unsigned long i, char **cur)

@@ -9,10 +9,46 @@ void serialize_ulong_test(void)
 {
   printf("\n");
 
-  int char_count = 9;
+  int char_count = 25;
   size_t size = sizeof(char) * char_count;
   char *data = g_malloc(size);
   char *cur = data;
+
+  /*
+  cur = data;
+  memset(data, 0, size);
+  write_ulong(1, &cur);
+  g_assert_cmpstr(to_hex(data, char_count), ==, "01 00 00 00 00 00 00 00 00");
+
+  cur = data;
+  memset(data, 0, size);
+  write_ulong(300, &cur);
+  g_assert_cmpstr(to_hex(data, char_count), ==, "AC 02 00 00 00 00 00 00 00");
+  */
+
+  cur = data;
+  memset(data, 0, size);
+  write_ulong(1, &cur);
+  g_assert_cmpint(read_ulong(&data), ==, 1);
+
+  cur = data;
+  memset(data, 0, size);
+  write_ulong(300, &cur);
+  g_assert_cmpint(read_ulong(&data), ==, 300);
+
+  for (unsigned long i = 0; i < ULONG_MAX; i = (i + 1) * 2.5) {
+    printf("%lu\n", i);
+    cur = data;
+    memset(data, 0, size);
+    write_ulong(i, &cur);
+    g_assert_cmpint(read_ulong(&data), ==, i);
+  }
+
+  /*
+  cur = data;
+  memset(data, 0, size);
+  serialize_ulong(1000, &cur);
+  g_assert_cmpstr(to_hex(data, char_count), ==, "00 00 00 00 00 00 00 00 00");
 
   cur = data;
   memset(data, 0, size);
@@ -58,6 +94,7 @@ void serialize_ulong_test(void)
   memset(data, 0, size);
   serialize_ulong(1024 * 1024 * 10, &cur);
   g_assert_cmpstr(to_hex(data, char_count), ==, "03 a0 00 00 00 00 00 00 00");
+  */
 
 }
 
