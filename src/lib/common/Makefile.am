@@ -13,9 +13,6 @@ libcommon_a_SOURCES = \
 	files.c \
 	info.c
 
-AM_LDADD = libcommon.a
-AM_LDADD += $(GLIB_LIBS)
-
 TESTS=$(check_PROGRAMS)
 check_PROGRAMS=info_test serialize_test
 

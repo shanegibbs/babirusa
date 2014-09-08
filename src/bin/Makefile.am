@@ -1,4 +1,4 @@
-AM_CFLAGS = $(GLIB_CFLAGS) -I$(top_srcdir)/src/bin -I$(top_srcdir)/src/lib -I$(top_srcdir)/src/lib/dbreg
+AM_CFLAGS = $(GLIB_CFLAGS) -I$(top_srcdir)/src/bin -I$(top_srcdir)/src/lib/common -I$(top_srcdir)/src/lib -I$(top_srcdir)/src/lib/dbreg
 if DEBUG
   AM_CFLAGS += @BAB_DEBUG_CFLAGS@
 else
@@ -7,15 +7,12 @@ endif
 
 bin_PROGRAMS = babirusa
 
-babirusa_CPPFLAGS = -I$(top_srcdir)/src/lib/common
 babirusa_SOURCES = babirusa.c
-babirusa_LDADD = $(AM_LDFLAGS)
+babirusa_LDADD = $(GLIB_LIBS) $(GOBJECT_LIBS)
 babirusa_LDADD += libbabirusa_bin.a
-babirusa_LDADD += $(top_builddir)/src/lib/common/libcommon.a
 babirusa_LDADD += $(top_builddir)/src/lib/libbackup.a
 babirusa_LDADD += $(top_builddir)/src/lib/dbreg/libdbreg.a
-babirusa_LDADD += $(GLIB_LIBS)
-babirusa_LDADD += $(GOBJECT_LIBS)
+babirusa_LDADD += $(top_builddir)/src/lib/common/libcommon.a
 
 noinst_LIBRARIES = libbabirusa_bin.a
 libbabirusa_bin_a_SOURCES = options.c log.c

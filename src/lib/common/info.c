@@ -30,7 +30,7 @@ void bab_info_log(const char* msg, Info *info)
   g_assert(info->checksum != NULL);
 
   gchar *hex = bab_files_get_sha256_hex(info->checksum);
-  g_debug("%s: Info[filename=%s, size=%d, mtime=%d, checksum=%s]", msg, info->filename, info->size, info->mtime, hex);
+  g_debug("%s: Info[filename=%s, size=%lu, mtime=%lu, checksum=%s]", msg, info->filename, info->size, info->mtime, hex);
   g_free(hex);
 }
 
