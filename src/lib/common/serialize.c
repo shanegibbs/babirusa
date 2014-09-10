@@ -4,7 +4,14 @@
 
 #include "serialize.h"
 
-char* to_hex(char *mem, int count)
+void to_hex(FILE *stream, char *mem, int count)
+{
+  char *output = to_hex_str(mem, count);
+  fprintf(stream, "%s\n", output);
+  g_free(output);
+}
+
+char* to_hex_str(char *mem, int count)
 {
   int char_count = (count * 2) + (count);
   char *output = g_malloc(sizeof(char) * char_count);
@@ -33,67 +40,49 @@ char* to_hex(char *mem, int count)
   }
 }*/
 
-void serialize_char(char i, char **cur)
+void write_uchar(unsigned char i, char **cur)
 {
+  // printf("Writing uchar 0x%0X\n", i);
   **cur = i;
   (*cur)++;
 }
 
-static char read_char(char **cur)
+unsigned char read_uchar(char **cur)
 {
-  char i = **cur;
+  unsigned char i = **cur;
+  // printf("Reading uchar 0x%0X\n", i);
   (*cur)++;
   return i;
 }
 
+/*
+LSB, 7 bits at a time
+*/
 void write_ulong(unsigned long i, char **cur)
 {
+  unsigned char next;
   while (i >= 0x80) {
-    serialize_char(i | 0x80, cur);
+    next = (i | 0x80) & 0xff;
+    // printf("Write next is %0X\n", (unsigned char)i);
+    write_uchar(i | 0x80, cur);
     i >>= 7;
   }
   g_assert_cmpint(i, <, 0x80);
-  serialize_char(i, cur);
+  // printf("Write last is %0X\n", (unsigned char)i);
+  write_uchar(i, cur);
 }
 
 unsigned long read_ulong(char **cur)
 {
   unsigned long i = 0;
   unsigned char n;
-  // printf("i(0)=%lu\n", i);
 
-  int a = 0;
-  while ((n = read_char(cur)) >= 0x80) {
+  unsigned short a = 0;
+  while ((n = read_uchar(cur)) >= 0x80) {
     i |= (n & 0x7f) << (a++ * 7);
-    // printf("i(1)=%lu\n", i);
-    // printf("n=%d\n", n);
   }
 
   g_assert_cmpint(n, <, 0x80);
-  // printf("n=%d\n", n);
-  i |= n << (a * 7);
+  i |= (unsigned long)n << (a * 7);
   return i;
-}
-
-void serialize_ulong(unsigned long i, char **cur)
-{
-  gboolean started = FALSE;
-  char val;
-  short bytes = 0;
-
-  for (int n = 7; n >= 0; n--) {
-    val = (i >> (n * 8)) & 0xff;
-    if (started == TRUE || val != 0) {
-      if (started == FALSE) {
-        started = TRUE;
-        bytes = n + 1;
-        serialize_char(bytes, cur);
-      }
-      serialize_char(val, cur);
-    }
-  }
-
-  if (started == FALSE) {
-    serialize_char(0, cur);
-  }
 }
