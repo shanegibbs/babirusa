@@ -81,10 +81,39 @@ void info_unmarshall_test(void)
 
 }
 
+void info_marshall_roundtrip_test(void)
+{
+  Checksum *checksum = (Checksum*) "ABCDEFGHIJKJMNOPQRSTUVWXYZ012345";
+
+  unsigned long size = 300;
+  long mtime = 400;
+
+  Info *info = bab_info_new("file", size, mtime, checksum);
+
+  g_assert_true(info->size == size);
+  g_assert_cmpint(info->mtime, ==, mtime);
+  g_assert_cmpstr(info->filename, ==, "file");
+  g_assert_cmpstr((char*)info->checksum, ==, "ABCDEFGHIJKJMNOPQRSTUVWXYZ012345");
+
+  char *data = bab_info_marshall(info);
+
+  Info *info2 = bab_info_unmarshall(data);
+
+  g_assert(info2 != NULL);
+  g_assert_cmpint(info2->size, ==, size);
+  g_assert_cmpint(info2->mtime, ==, mtime);
+  g_assert_cmpstr(info2->filename, ==, "file");
+  g_assert_cmpstr((char*)info2->checksum, ==, "ABCDEFGHIJKJMNOPQRSTUVWXYZ012345");
+
+  bab_info_free(info);
+  bab_info_free(info2);
+}
+
 int main(int argc, char** argv)
 {
   g_test_init(&argc, &argv, NULL);
   g_test_add_func("/common/info/marshall", info_marshall_test);
   g_test_add_func("/common/info/unmarshall", info_unmarshall_test);
+  g_test_add_func("/common/info/marshal_roundtrip", info_marshall_roundtrip_test);
   return g_test_run();
 }

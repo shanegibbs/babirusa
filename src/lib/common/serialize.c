@@ -55,6 +55,26 @@ unsigned char read_uchar(char **cur)
   return i;
 }
 
+void write_string(char *str, char **cur)
+{
+  unsigned long len = strlen(str);
+  write_ulong(len, cur);
+  memcpy(*cur, str, len);
+
+  (*cur) += len;
+}
+
+char* read_string(char **cur)
+{
+  unsigned long len = read_ulong(cur);
+  char *str = g_malloc(len + 1);
+  memcpy(str, *cur, len);
+  str[len] = 0;
+
+  (*cur) += len;
+  return str;
+}
+
 /*
 LSB, 7 bits at a time
 */

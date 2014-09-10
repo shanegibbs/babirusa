@@ -2,6 +2,7 @@
 
 #include "info.h"
 #include "files.h"
+#include "serialize.h"
 
 Info* bab_info_new(gchar *filename, unsigned long size, long mtime, Checksum *checksum)
 {
@@ -57,6 +58,36 @@ unsigned long char_ulong1(char i)
 
 char* bab_info_marshall(Info *info)
 {
+  char* data = g_malloc(1024);
+  char* cur = data;
+
+  write_ulong(info->size, &cur);
+  write_ulong(info->mtime, &cur);
+  write_string(info->filename, &cur);
+  write_string((char*)info->checksum, &cur);
+
+  // int filename_len = strlen(info->filename);
+  // write_ulong(filename_len, &cur);
+  // memcpy(cur, info->filename, filename_len);
+
+  return data;
+}
+
+Info* bab_info_unmarshall(char *data)
+{
+  Info *info = g_slice_alloc(sizeof(Info));
+  char* cur = data;
+
+  info->size = read_ulong(&cur);
+  info->mtime = read_ulong(&cur);
+  info->filename = read_string(&cur);
+  info->checksum = (Checksum*)read_string(&cur);
+
+  return info;
+}
+
+char* bab_info_marshall2(Info *info)
+{
   int filename_size = strlen(info->filename);
   int checksum_size = bab_digest_length();
   int size = 6 + filename_size + checksum_size;
@@ -77,7 +108,7 @@ char* bab_info_marshall(Info *info)
   return data;
 }
 
-Info* bab_info_unmarshall(char *data)
+Info* bab_info_unmarshall2(char *data)
 {
   Info *info = g_slice_alloc(sizeof(Info));
 
