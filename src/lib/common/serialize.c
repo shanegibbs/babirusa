@@ -79,7 +79,7 @@ unsigned long read_ulong(char **cur)
 
   unsigned short a = 0;
   while ((n = read_uchar(cur)) >= 0x80) {
-    i |= (n & 0x7f) << (a++ * 7);
+    i |= (unsigned long)(n & 0x7f) << (a++ * 7);
   }
 
   g_assert_cmpint(n, <, 0x80);

@@ -94,33 +94,21 @@ void serialize_ulong_basic_test(void)
     printf("FAILED expected %lu, got %lu\n", n, x);
     g_assert_cmpint(x, ==, n);
   }
-}
 
-void serialize_ulong_hard_test(void)
-{
-  int char_count = 40;
-  size_t size = sizeof(char) * char_count;
-  char *data = g_malloc(size);
-  char *cur = data;
-
-  unsigned long test_value = 4850832165;
-  // unsigned long test_value = 300;
-
-  cur = data;
+  n = 4850832165;
   memset(data, 0, size);
-  write_ulong(test_value, &cur);
-  printf("%lu\n", cur - data);
-  // to_hex(stdout, data, 8);
   cur = data;
-  unsigned long x = read_ulong(&cur);
-  printf("%lu\n", cur - data);
-  g_assert_cmpint(x, ==, test_value);
+  write_ulong(n, &cur);
+  cur = data;
+  x = read_ulong(&cur);
+  if (x != n) {
+    printf("FAILED expected %lu, got %lu\n", n, x);
+    g_assert_cmpint(x, ==, n);
+  }
 }
 
 void serialize_ulong_test(void)
 {
-  printf("\n");
-
   int char_count = 20;
   size_t size = sizeof(char) * char_count;
   char *data = g_malloc(size);
@@ -149,70 +137,20 @@ void serialize_ulong_test(void)
   g_assert_cmpint(read_ulong(&data), ==, 300);
 
   unsigned long n;
-  for (unsigned long i = 0; i < ULONG_MAX; i = (i + 1) * 2.5) {
-    printf("%lu\n", i);
+  unsigned long x;
+  for (unsigned short i = 0; i < 64; i++) {
+    x = pow(2, i);
+
     memset(data, 0, size);
 
     cur = data;
-    write_ulong(i, &cur);
+    write_ulong(x, &cur);
 
     cur = data;
     n = read_ulong(&cur);
 
-    if (n != i) g_assert_cmpint(n, ==, i);
+    if (n != x) g_assert_cmpint(n, ==, x);
   }
-
-  /*
-  cur = data;
-  memset(data, 0, size);
-  serialize_ulong(1000, &cur);
-  g_assert_cmpstr(to_hex(data, char_count), ==, "00 00 00 00 00 00 00 00 00");
-
-  cur = data;
-  memset(data, 0, size);
-  serialize_ulong(0, &cur);
-  g_assert_cmpstr(to_hex(data, char_count), ==, "00 00 00 00 00 00 00 00 00");
-
-  cur = data;
-  memset(data, 0, size);
-  serialize_ulong(1, &cur);
-  g_assert_cmpstr(to_hex(data, char_count), ==, "01 01 00 00 00 00 00 00 00");
-
-  cur = data;
-  memset(data, 0, size);
-  serialize_ulong(pow(2, 4), &cur);
-  g_assert_cmpstr(to_hex(data, char_count), ==, "01 10 00 00 00 00 00 00 00");
-
-  cur = data;
-  memset(data, 0, size);
-  serialize_ulong(pow(2, 8), &cur);
-  g_assert_cmpstr(to_hex(data, char_count), ==, "02 01 00 00 00 00 00 00 00");
-
-  cur = data;
-  memset(data, 0, size);
-  serialize_ulong(pow(2, 12), &cur);
-  g_assert_cmpstr(to_hex(data, char_count), ==, "02 10 00 00 00 00 00 00 00");
-
-  cur = data;
-  memset(data, 0, size);
-  serialize_ulong(pow(2, 16), &cur);
-  g_assert_cmpstr(to_hex(data, char_count), ==, "03 01 00 00 00 00 00 00 00");
-
-  cur = data;
-  memset(data, 0, size);
-  serialize_ulong(pow(2, 32), &cur);
-  g_assert_cmpstr(to_hex(data, char_count), ==, "05 01 00 00 00 00 00 00 00");
-
-  cur = data;
-  memset(data, 0, size);
-  serialize_ulong(-1, &cur);
-  g_assert_cmpstr(to_hex(data, char_count), ==, "08 ff ff ff ff ff ff ff ff");
-
-  cur = data;
-  memset(data, 0, size);
-  serialize_ulong(1024 * 1024 * 10, &cur);
-  g_assert_cmpstr(to_hex(data, char_count), ==, "03 a0 00 00 00 00 00 00 00");
-  */
 
 }
 
@@ -220,7 +158,6 @@ int main(int argc, char** argv)
 {
   g_test_init(&argc, &argv, NULL);
   g_test_add_func("/common/serialize/ulong_basic", serialize_ulong_basic_test);
-  g_test_add_func("/common/serialize/ulong_hard", serialize_ulong_hard_test);
   g_test_add_func("/common/serialize/ulong", serialize_ulong_test);
 
   return g_test_run();
