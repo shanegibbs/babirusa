@@ -52,6 +52,7 @@ void serialize_ulong_basic_test(void)
   g_assert_cmpint(read_ulong(&cur), ==, 300);
 
   unsigned long n;
+  unsigned long x;
 
   // > int
   n = UINT_MAX;
@@ -88,7 +89,11 @@ void serialize_ulong_basic_test(void)
   cur = data;
   write_ulong(n, &cur);
   cur = data;
-  g_assert_cmpint(read_ulong(&cur), ==, n);
+  x = read_ulong(&cur);
+  if (x != n) {
+    printf("FAILED expected %lu, got %lu\n", n, x);
+    g_assert_cmpint(x, ==, n);
+  }
 }
 
 void serialize_ulong_hard_test(void)
