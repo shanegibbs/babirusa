@@ -138,7 +138,7 @@ static void berkely_registry_add(void *self, Info *info)
   key.flags = DB_DBT_USERMEM;
 
   data.data = info_data;
-  data.size = *info_data;
+  data.size = 1024;
 
   if ((ret = dbp->put(dbp, NULL, &key, &data, 0)) == 0) {
     g_debug("db: '%s' key stored", (char*)key.data);

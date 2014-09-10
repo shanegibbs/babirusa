@@ -26,33 +26,33 @@ void berkely_registry_get_test(void)
   Checksum *checksum = (Checksum*)"ABCDEFGHIJKJMNOPQRSTUVWXYZ012345";
   Info *info_a = bab_info_new("myfile", 2, 3, checksum);
 
-  g_assert_cmpstr(info_a->filename, ==, "myfile");
-  g_assert_cmpstr((char*) info_a->checksum, ==, "ABCDEFGHIJKJMNOPQRSTUVWXYZ012345");
   g_assert_cmpint(info_a->size, ==, 2);
   g_assert_cmpint(info_a->mtime, ==, 3);
+  g_assert_cmpstr(info_a->filename, ==, "myfile");
+  g_assert_cmpstr((char*) info_a->checksum, ==, "ABCDEFGHIJKJMNOPQRSTUVWXYZ012345");
 
   reg->add(reg, info_a);
 
-  g_assert_cmpstr(info_a->filename, ==, "myfile");
-  g_assert_cmpstr((char*) info_a->checksum, ==, "ABCDEFGHIJKJMNOPQRSTUVWXYZ012345");
   g_assert_cmpint(info_a->size, ==, 2);
   g_assert_cmpint(info_a->mtime, ==, 3);
+  g_assert_cmpstr(info_a->filename, ==, "myfile");
+  g_assert_cmpstr((char*) info_a->checksum, ==, "ABCDEFGHIJKJMNOPQRSTUVWXYZ012345");
 
   Info *info_b = reg->get(reg, "myfile");
 
-  g_assert_cmpstr(info_a->filename, ==, "myfile");
-  g_assert_cmpstr((char*) info_a->checksum, ==, "ABCDEFGHIJKJMNOPQRSTUVWXYZ012345");
   g_assert_cmpint(info_a->size, ==, 2);
   g_assert_cmpint(info_a->mtime, ==, 3);
+  g_assert_cmpstr(info_a->filename, ==, "myfile");
+  g_assert_cmpstr((char*) info_a->checksum, ==, "ABCDEFGHIJKJMNOPQRSTUVWXYZ012345");
 
   g_assert(info_b != NULL);
   g_assert(info_b->filename != NULL);
   g_assert(info_b->checksum != NULL);
 
-  g_assert_cmpstr(info_a->filename, ==, info_b->filename);
-  g_assert_cmpstr("ABCDEFGHIJKJMNOPQRSTUVWXYZ012345", ==, (char*) info_b->checksum);
-  g_assert_cmpint(info_a->size, ==, info_b->size);
-  g_assert_cmpint(info_a->mtime, ==, info_b->mtime);
+  g_assert_cmpint(info_b->size, ==, 2);
+  g_assert_cmpint(info_b->mtime, ==, 3);
+  g_assert_cmpstr(info_b->filename, ==, "myfile");
+  g_assert_cmpstr((char*)info_b->checksum, ==, "ABCDEFGHIJKJMNOPQRSTUVWXYZ012345");
 
   bab_info_free(info_a);
   bab_info_free(info_b);
