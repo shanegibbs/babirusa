@@ -55,13 +55,17 @@ unsigned char read_uchar(char **cur)
   return i;
 }
 
+void write_bytes(char *bytes, unsigned long count, char **cur)
+{
+  write_ulong(count, cur);
+  memcpy(*cur, bytes, count);
+
+  (*cur) += count;
+}
+
 void write_string(char *str, char **cur)
 {
-  unsigned long len = strlen(str);
-  write_ulong(len, cur);
-  memcpy(*cur, str, len);
-
-  (*cur) += len;
+  write_bytes(str, strlen(str), cur);
 }
 
 char* read_string(char **cur)
@@ -80,9 +84,9 @@ LSB, 7 bits at a time
 */
 void write_ulong(unsigned long i, char **cur)
 {
-  unsigned char next;
+  // unsigned char next;
   while (i >= 0x80) {
-    next = (i | 0x80) & 0xff;
+    // next = (i | 0x80) & 0xff;
     // printf("Write next is %0X\n", (unsigned char)i);
     write_uchar(i | 0x80, cur);
     i >>= 7;

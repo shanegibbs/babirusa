@@ -77,7 +77,7 @@ static void berkely_registry_free(void *self)
   g_debug("Shutting down berkeley DB");
   DB *dbp = get_db(self);
   if (dbp != NULL) {
-    list_db(dbp);
+    if (dbp == NULL) list_db(dbp);
     dbp->close(dbp, 0);
   }
 }
