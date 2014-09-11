@@ -37,7 +37,7 @@ void bab_info_log(const char* msg, Info *info)
 
 char* bab_info_marshall(Info *info)
 {
-  char* data = g_malloc(1024);
+  char* data = g_malloc(bab_info_max_size());
   char* cur = data;
 
   write_ulong(info->size, &cur);
@@ -59,4 +59,9 @@ Info* bab_info_unmarshall(char *data)
   info->checksum = (Checksum*)read_string(&cur);
 
   return info;
+}
+
+long bab_info_max_size()
+{
+  return 4096;
 }

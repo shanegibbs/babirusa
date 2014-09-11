@@ -1,4 +1,5 @@
 #include <glib.h>
+#include <sys/stat.h>
 
 #include "registry.h"
 
@@ -12,3 +13,5 @@ typedef struct _BackupEngine
 } BackupEngine;
 
 BackupEngine* DefaultBackupEngine();
+
+void process_file(gchar* filename, struct stat *s, void *data);

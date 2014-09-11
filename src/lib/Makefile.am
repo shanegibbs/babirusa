@@ -12,3 +12,10 @@ endif
 noinst_LIBRARIES = libbackup.a
 
 libbackup_a_SOURCES = backup.c
+
+TESTS=$(check_PROGRAMS)
+check_PROGRAMS=backup_test
+
+backup_test_SOURCES = backup_test.c
+backup_test_LDADD = libbackup.a
+backup_test_LDADD += $(top_builddir)/src/lib/common/libcommon.a

@@ -77,7 +77,7 @@ static void berkely_registry_free(void *self)
   g_debug("Shutting down berkeley DB");
   DB *dbp = get_db(self);
   if (dbp != NULL) {
-    if (dbp == NULL) list_db(dbp);
+    list_db(dbp);
     dbp->close(dbp, 0);
   }
 }
@@ -138,7 +138,7 @@ static void berkely_registry_add(void *self, Info *info)
   key.flags = DB_DBT_USERMEM;
 
   data.data = info_data;
-  data.size = 1024;
+  data.size = bab_info_max_size();
 
   if ((ret = dbp->put(dbp, NULL, &key, &data, 0)) == 0) {
     g_debug("db: '%s' key stored", (char*)key.data);

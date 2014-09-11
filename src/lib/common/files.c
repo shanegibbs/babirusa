@@ -29,7 +29,7 @@ void bab_file_scan(const gchar *p, FileScanCallback callback, void *data)
     g_assert(dir != NULL);
 
     const gchar *d;
-    gchar *full = g_malloc(1024);
+    gchar *full = g_malloc(4096);
     while ((d = g_dir_read_name(dir)) != NULL)
     {
         sprintf(full, "%s/%s", p, d);
@@ -113,14 +113,3 @@ Checksum* bab_files_calc_file_hash(gchar *filename, GError **err)
     g_assert(c != NULL);
     return c;
 }
-
-
-
-
-
-
-
-
-
-
-

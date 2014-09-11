@@ -13,19 +13,18 @@ typedef struct _Data
 } Data;
 
 // public functions
-void* backup_engine_new(GError**);
-void backup_engine_free(void *self);
-void backup_engine_set_registry(void *self, Registry*);
-gboolean backup_engine_backup_to_path(void *self, const gchar *from, gchar *to);
+static void* new(GError**);
+static void backup_engine_free(void *self);
+static void set_registry(void *self, Registry*);
+static gboolean backup_engine_backup_to_path(void *self, const gchar *from, gchar *to);
 
 // private functions
-void process_file(gchar* filename, struct stat *s, void*);
 
 BackupEngine DefaultBackupEngineImpl =
 {
-    backup_engine_new,
+    new,
     backup_engine_free,
-    backup_engine_set_registry,
+    set_registry,
     backup_engine_backup_to_path,
     NULL
 };
@@ -39,10 +38,10 @@ static Data* get_data(BackupEngine *e)
 
 BackupEngine* DefaultBackupEngine()
 {
-    return &DefaultBackupEngineImpl;
+  return &DefaultBackupEngineImpl;
 }
 
-void* backup_engine_new(GError **error)
+static void* new(GError **error)
 {
     g_debug("Creating new DefaultBackupEngine");
 
@@ -51,13 +50,13 @@ void* backup_engine_new(GError **error)
     return n;
 }
 
-void backup_engine_free(void *self)
+static void backup_engine_free(void *self)
 {
     g_free(get_data(self));
     g_free(self);
 }
 
-void backup_engine_set_registry(void *self, Registry* reg)
+static void set_registry(void *self, Registry* reg)
 {
     g_assert(self != NULL);
     g_assert(reg != NULL);
@@ -66,24 +65,24 @@ void backup_engine_set_registry(void *self, Registry* reg)
     data->registry = reg;
 }
 
-gboolean backup_engine_backup_to_path(void *self, const gchar *from, gchar *to)
+static gboolean backup_engine_backup_to_path(void *self, const gchar *from, gchar *to)
 {
     g_message("Starting backup from [%s] to repo at [%s]", from, to);
 
     Data *data = get_data(self);
-    bab_file_scan(from, &process_file, data->registry);
+    bab_file_scan(from, &process_file, (void*)data->registry);
 
     return TRUE;
 }
 
-void process_file(gchar* filename, struct stat *s, void *r)
+void process_file(gchar* filename, struct stat *s, void *data)
 {
     g_debug("Processing file %s", filename);
 
     GError *error = NULL;
 
     Checksum *chksum = bab_files_calc_file_hash(filename, &error);
-    chksum = (Checksum*) bab_files_get_sha256_hex(chksum);
+    // chksum = (Checksum*) bab_files_get_sha256_hex(chksum);
     g_assert((chksum == NULL && error != NULL) || (chksum != NULL && error == NULL));
     if (error != NULL) {
         g_warning("Unable to process file %s: %s", filename, error->message);
@@ -99,7 +98,9 @@ void process_file(gchar* filename, struct stat *s, void *r)
     g_assert(info != NULL);
     bab_info_log("process_file", info);
 
-    Registry *reg = r;
+    g_assert(data != NULL);
+    Registry *reg = data;
+    g_assert(reg->add != NULL);
     reg->add(reg, info);
 
     bab_info_free(info);
