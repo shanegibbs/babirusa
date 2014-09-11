@@ -44,12 +44,12 @@ AC_SEARCH_LIBS([pow], [m], [], [
 ])
 
 # Checks for glib
-PKG_CHECK_MODULES([GLIB], [glib-2.0], [], [
-  AC_MSG_ERROR([unable to find glib-2.0])
+PKG_CHECK_MODULES([GLIB], [glib-2.0], [LIBS="-lglib-2.0 $LIBS"], [
+  AC_MSG_ERROR([no glib-2.0 libs found])
 ])
 
 # Checks for gobject
-PKG_CHECK_MODULES([GOBJECT], [gobject-2.0], [], [
+PKG_CHECK_MODULES([GOBJECT], [gobject-2.0], [LIBS="-lgobject-2.0 $LIBS"], [
   AC_MSG_FAILURE([no gobject-2.0 libs found])
 ])
 
