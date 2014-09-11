@@ -35,31 +35,31 @@ AC_HEADER_STDC
 AC_CHECK_HEADERS([stdio.h])
 AC_CHECK_HEADERS([stdlib.h])
 
+# Check for math
+AC_CHECK_HEADERS([math.h], [], [
+  AC_MSG_ERROR([Error, math.h is missing])
+])
+AC_SEARCH_LIBS([pow], [m], [], [
+  AC_MSG_ERROR([unable to find the pow() function])
+])
+
 # Checks for glib
-PKG_CHECK_MODULES([GLIB], [glib-2.0], [have_libglib=yes], [have_libglib=no])
-AM_CONDITIONAL([GLIB],  [test "$have_libglib" = "yes"])
-if test "x$have_libglib" = xno
-then
-  AC_MSG_FAILURE([no glib-2.0 found. You probably need to install libglib2.0-dev])
-fi
+PKG_CHECK_MODULES([GLIB], [glib-2.0], [], [
+  AC_MSG_ERROR([unable to find glib-2.0])
+])
 
 # Checks for gobject
-PKG_CHECK_MODULES([GOBJECT], [gobject-2.0], [have_libgobject=yes], [have_libgobject=no])
-AM_CONDITIONAL([GOBJECT], [test "$have_libgobject" = "yes"])
-if test "$have_libgobject" = "no"
-then
+PKG_CHECK_MODULES([GOBJECT], [gobject-2.0], [], [
   AC_MSG_FAILURE([no gobject-2.0 libs found])
-fi
+])
 
 # Checks for berkeley db
 AC_SEARCH_LIBS([db_create], [db-5.3 db], [], [
   AC_MSG_ERROR([unable to find the db_create() function])
 ])
-AC_CHECK_HEADER([db.h])
-if test "$ac_cv_header_db_h" = "no"
-then
-	AC_MSG_ERROR([Error, db.h is missing])
-fi
+AC_CHECK_HEADER([db.h], [], [
+  AC_MSG_ERROR([Error, db.h is missing])
+])
 
 AC_SUBST([BAB_CFLAGS], ["-DG_LOG_DOMAIN=\\\"Babirusa\\\" -O3 -DG_DISABLE_ASSERT"])
 AC_SUBST([BAB_DEBUG_CFLAGS], ["-DG_LOG_DOMAIN=\\\"Babirusa\\\" -Wall -Werror -g -O0"])
